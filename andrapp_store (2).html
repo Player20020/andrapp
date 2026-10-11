@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AndrApp — Hub & Store by Kalajer</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            indra: {
+              bg: '#0c0f14',
+              surface: '#151922',
+              card: '#1c222e',
+              border: '#283143',
+              accent: '#00e599',
+              accentHover: '#00c784',
+              accentDim: 'rgba(0, 229, 153, 0.12)',
+              text: '#f1f5f9',
+              muted: '#94a3b8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0c0f14;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #283143;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00e599;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.35; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.04); }
+    }
+    .glow-aura {
+      animation: pulseGlow 8s ease-in-out infinite;
+    }
+  </style>
+</head>
+
+<body class="bg-indra-bg text-indra-text font-sans min-h-screen flex flex-col antialiased selection:bg-indra-accent selection:text-black">
+
+  <!-- Фоновые неоновые эффекты -->
+  <div class="fixed top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none glow-aura"></div>
+  <div class="fixed bottom-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none glow-aura" style="animation-delay: -4s;"></div>
+
+  <header class="sticky top-0 z-40 bg-indra-bg/90 backdrop-blur-xl border-b border-indra-border transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
+      
+      <!-- Логотип AndrApp с секретным триггером тройного клика -->
+      <div class="flex items-center gap-3 cursor-pointer select-none" id="brandLogoTrigger" title="Нажми 3 раза для входа создателя">
+        <div class="relative w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 transform hover:scale-105 transition-transform active:scale-95">
+          <svg class="w-6 h-6 text-black fill-current drop-shadow-sm" viewBox="0 0 24 24">
+            <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.38-1 1.72V7h2a5 5 0 0 1 5 5v1H4v-1a5 5 0 0 1 5-5h2V5.72A2 2 0 0 1 12 2M7.5 10a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2M4 14h16v5a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-5m-2-1a1 1 0 0 1 1-1h.08a2 2 0 0 1 1.92 1.45V18a2 2 0 0 1-2 2H2a1 1 0 0 1-1-1v-5m20 0a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-.92a2 2 0 0 1-2-2v-4.55c.67-.32 1.3-.45 1.92-.45H22Z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">AndrApp</span>
+            <span id="roleBadge" class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-indra-card text-indra-muted border border-indra-border">Store</span>
+          </div>
+          <p class="text-xs text-indra-muted leading-none">by Kalajer • Hub & Releases</p>
+        </div>
+      </div>
+
+      <!-- Десктопный поиск -->
+      <div class="flex-1 max-w-md hidden md:block">
+        <div class="relative group">
+          <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-indra-muted group-focus-within:text-indra-accent transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input 
+            type="text" 
+            id="searchInput"
+            placeholder="Поиск релизов..."
+            class="w-full bg-indra-surface border border-indra-border focus:border-indra-accent rounded-full pl-10 pr-10 py-2 text-sm text-indra-text placeholder-indra-muted focus:outline-none focus:ring-2 focus:ring-indra-accent/20 transition-all"
+          >
+          <button id="clearSearchBtn" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-xs text-indra-muted hover:text-white p-1">✕</button>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        
+        <!-- ПАНЕЛЬ СОЗДАТЕЛЯ: Скрыта для гостей, показывается только Kalajer после пароля -->
+        <div id="adminControlsGroup" class="hidden items-center gap-2">
+          <!-- Кнопка "Опубликовать / Залить файл" -->
+          <button onclick="openUploadModal()" class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-indra-accent text-black font-bold text-xs shadow-md shadow-emerald-500/20 hover:bg-indra-accentHover transition-transform active:scale-95">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+            <span class="hidden sm:inline">Загрузить релиз</span>
+            <span class="sm:hidden">Залить</span>
+          </button>
+
+          <!-- Кнопка настроек репозитория и токена -->
+          <button onclick="openSettingsModal()" class="p-2 rounded-xl bg-indra-surface border border-indra-border text-indra-muted hover:text-white hover:border-indra-accent transition-colors" title="Настройки хранилища">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </button>
+
+          <!-- Выход из режима создателя -->
+          <button onclick="logoutAdmin()" class="p-2 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 transition-colors" title="Заблокировать панель управления">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Кнопка обновления витрины (доступна всем) -->
+        <button onclick="syncCatalog(true)" id="refreshBtn" class="p-2 rounded-xl bg-indra-surface border border-indra-border text-indra-muted hover:text-white hover:border-indra-accent transition-colors" title="Обновить каталог">
+          <svg class="w-4 h-4" id="refreshIcon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Мобильная строка поиска -->
+    <div class="px-4 pb-2 md:hidden">
+      <div class="relative">
+        <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-indra-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input 
+          type="text" 
+          id="searchInputMobile"
+          placeholder="Поиск релизов..."
+          class="w-full bg-indra-surface border border-indra-border rounded-full pl-10 pr-4 py-2 text-sm text-indra-text placeholder-indra-muted focus:outline-none focus:border-indra-accent"
+        >
+      </div>
+    </div>
+
+    <!-- Горизонтальная лента категорий -->
+    <div class="border-t border-indra-border/60 bg-indra-bg/60">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 overflow-x-auto no-scrollbar flex items-center gap-2" id="categoriesBar">
+        <!-- Категории рендерятся скриптом динамически -->
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    
+    <!-- Инфо-баннер статуса -->
+    <div id="statusBanner" class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indra-card via-slate-900 to-emerald-950/30 border border-indra-border p-5 sm:p-7 shadow-xl">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold mb-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="bannerRepoText">GitHub Releases Hub</span>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+            Каталог релизов Kalajer
+          </h1>
+          <p class="text-xs sm:text-sm text-indra-muted mt-1 max-w-xl">
+            Личный магазин и хаб проектов. Прямое скачивание файлов на максимальной скорости без сторонней рекламы и ожидания.
+          </p>
+        </div>
+        
+        <!-- Кнопка быстрой авторизации автора в баннере (если не вошел) -->
+        <div id="bannerAdminAction" class="w-full sm:w-auto">
+          <button onclick="promptAdminLogin()" class="w-full sm:w-auto px-4 py-2.5 rounded-2xl bg-indra-surface hover:bg-indra-card border border-indra-border text-xs font-semibold text-white flex items-center justify-center gap-2 transition-all">
+            <span>🔐</span> Вход создателя
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2" id="gridTitle">
+          <span>Все доступные проекты</span>
+        </h2>
+        <p class="text-xs text-indra-muted mt-0.5" id="itemsCountText">Загрузка каталога...</p>
+      </div>
+      
+      <!-- Сортировка -->
+      <div class="flex items-center gap-2">
+        <select id="sortSelect" class="bg-indra-surface border border-indra-border rounded-xl text-xs text-indra-muted px-3 py-1.5 focus:outline-none focus:border-indra-accent">
+          <option value="featured">Сначала новые</option>
+          <option value="name">По алфавиту</option>
+          <option value="rating">По рейтингу</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Сетка приложений -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="appsContainer">
+      <!-- Рендерится через JavaScript -->
+    </div>
+
+    <!-- Пустое состояние (когда в базе еще нет добавленных файлов) -->
+    <div id="emptyState" class="hidden text-center py-16 px-6 bg-indra-surface/40 rounded-3xl border border-dashed border-indra-border">
+      <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-indra-card flex items-center justify-center text-3xl">
+        📦
+      </div>
+      <h3 class="text-base font-bold text-white mb-1" id="emptyTitle">В каталоге пока нет релизов</h3>
+      <p class="text-xs text-indra-muted max-w-md mx-auto mb-5" id="emptyDesc">
+        Витрина чиста. Вы можете войти в панель создателя и загрузить свой первый APK, EXE, скрипт или сайт.
+      </p>
+      <div id="emptyAdminAction">
+        <button onclick="promptAdminLogin()" class="px-5 py-2.5 rounded-2xl bg-indra-accent text-black font-bold text-xs hover:bg-indra-accentHover transition-transform active:scale-95 shadow-lg shadow-emerald-500/20">
+          Войти и добавить первый релиз
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-indra-border/60 bg-indra-surface/30 mt-12 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-indra-muted">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-white">AndrApp</span>
+        <span>•</span>
+        <span>Витрина релизов Kalajer</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> GitHub Releases Storage</span>
+        <button onclick="promptAdminLogin()" class="text-indra-border hover:text-indra-muted transition-colors text-xs p-1" title="Панель автора">
+          🔒
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Модальное окно просмотра релиза -->
+  <div id="appModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="bg-indra-surface border border-indra-border rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl transform scale-95 transition-transform duration-200" id="modalBox">
+      
+      <div class="p-6 relative border-b border-indra-border/60">
+        <button onclick="closeModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-indra-card flex items-center justify-center text-indra-muted hover:text-white hover:bg-indra-border transition-colors">
+          ✕
+        </button>
+
+        <div class="flex gap-4 items-start">
+          <div class="w-20 h-20 rounded-2xl bg-indra-card border border-indra-border/80 p-2 flex items-center justify-center flex-shrink-0 shadow-lg">
+            <img id="modalIcon" src="" alt="Иконка" class="w-full h-full object-contain rounded-xl">
+          </div>
+          
+          <div class="flex-1 pr-6">
+            <h2 id="modalTitle" class="text-xl font-bold text-white leading-tight"></h2>
+            <p id="modalAuthor" class="text-xs text-indra-accent font-medium mt-1"></p>
+            <div class="flex flex-wrap gap-2 mt-2" id="modalBadges"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 py-3 px-6 bg-indra-card/40 border-b border-indra-border/60 text-center divide-x divide-indra-border/50">
+        <div>
+          <div class="text-sm font-bold text-amber-400 flex items-center justify-center gap-1">
+            <span id="modalRating">5.0</span>
+            <span>★</span>
+          </div>
+          <div class="text-[10px] text-indra-muted mt-0.5">Рейтинг</div>
+        </div>
+        <div>
+          <div class="text-sm font-bold text-white" id="modalSize">0 MB</div>
+          <div class="text-[10px] text-indra-muted mt-0.5">Размер</div>
+        </div>
+        <div>
+          <div class="text-sm font-bold text-emerald-400 font-mono" id="modalVersion">v1.0</div>
+          <div class="text-[10px] text-indra-muted mt-0.5">Версия</div>
+        </div>
+      </div>
+
+      <div class="p-6 pb-2">
+        <a id="modalActionBtn" href="#" target="_blank" class="w-full py-3.5 px-6 rounded-2xl bg-indra-accent hover:bg-indra-accentHover text-black font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transform active:scale-[0.99] transition-all">
+          <span id="modalActionIcon">⬇️</span>
+          <span id="modalActionText">Скачать релиз</span>
+        </a>
+        <div class="flex items-center justify-center gap-3 mt-2 text-[11px] text-indra-muted">
+          <span id="modalActionNote">Прямая ссылка GitHub CDN</span>
+          <button onclick="copyDownloadUrl()" class="text-indra-accent hover:underline flex items-center gap-1">
+            <span>📋</span> Скопировать ссылку
+          </button>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-4">
+        <div>
+          <h3 class="text-sm font-bold text-white mb-2">Описание</h3>
+          <p id="modalDesc" class="text-xs leading-relaxed text-slate-300 whitespace-pre-line"></p>
+        </div>
+
+        <div id="modalFeaturesContainer" class="bg-indra-card/60 rounded-2xl p-4 border border-indra-border/60">
+          <h4 class="text-xs font-semibold text-indra-accent uppercase tracking-wider mb-2">Особенности</h4>
+          <ul id="modalFeaturesList" class="text-xs text-slate-300 space-y-1.5 list-disc list-inside"></ul>
+        </div>
+
+        <div>
+          <span class="text-[11px] text-indra-muted block mb-2">Теги:</span>
+          <div id="modalTags" class="flex flex-wrap gap-1.5"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Модальное окно авторизации создателя (Мастер-пароль) -->
+  <div id="authModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="bg-indra-surface border border-indra-border rounded-3xl max-w-sm w-full p-6 shadow-2xl relative">
+      <button onclick="closeAuthModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-indra-card flex items-center justify-center text-indra-muted hover:text-white transition-colors">
+        ✕
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-2xl bg-indra-accentDim border border-indra-accent/30 flex items-center justify-center text-lg">
+          🔐
+        </div>
+        <div>
+          <h2 class="text-base font-bold text-white" id="authModalTitle">Доступ создателя</h2>
+          <p class="text-xs text-indra-muted" id="authModalSubtitle">Вход в панель управления Kalajer</p>
+        </div>
+      </div>
+
+      <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs text-indra-muted mb-1.5" id="authInputLabel">Введите мастер-пароль</label>
+          <input 
+            type="password" 
+            id="adminPasswordInput" 
+            required 
+            placeholder="••••••••" 
+            class="w-full bg-indra-card border border-indra-border rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indra-accent font-mono"
+          >
+          <p class="text-[10px] text-indra-muted mt-1.5 leading-relaxed" id="authHintText">
+            Пароль защищает витрину от несанкционированной публикации сторонними людьми.
+          </p>
+        </div>
+
+        <div class="pt-1 flex items-center justify-end gap-2">
+          <button type="button" onclick="closeAuthModal()" class="px-4 py-2 rounded-xl bg-indra-card text-indra-muted text-xs hover:text-white">
+            Отмена
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-indra-accent text-black font-bold text-xs hover:bg-indra-accentHover transition-colors">
+            Войти
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Модальное окно публикации релиза (только для автора) -->
+  <div id="uploadModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="bg-indra-surface border border-indra-border rounded-3xl max-w-xl w-full max-h-[92vh] overflow-y-auto no-scrollbar shadow-2xl p-6 relative">
+      <button onclick="closeUploadModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-indra-card flex items-center justify-center text-indra-muted hover:text-white transition-colors">
+        ✕
+      </button>
+
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-10 h-10 rounded-2xl bg-indra-accentDim border border-indra-accent/30 flex items-center justify-center text-indra-accent font-bold">
+          🚀
+        </div>
+        <div>
+          <h2 class="text-lg font-bold text-white">Публикация нового релиза</h2>
+          <p class="text-xs text-indra-muted">Загрузка файла прямо в GitHub Releases без серверов</p>
+        </div>
+      </div>
+
+      <!-- Форма публикации -->
+      <form id="uploadForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+        
+        <!-- Выбор типа релиза -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Тип релиза</label>
+          <div class="grid grid-cols-3 sm:grid-cols-5 gap-2">
+            <button type="button" onclick="selectType('apk')" class="type-opt px-3 py-2 rounded-xl text-xs font-bold border border-indra-accent bg-indra-accent text-black transition-colors" data-type="apk">🤖 APK</button>
+            <button type="button" onclick="selectType('exe')" class="type-opt px-3 py-2 rounded-xl text-xs font-bold border border-indra-border bg-indra-card text-white hover:border-indra-accent transition-colors" data-type="exe">💻 EXE</button>
+            <button type="button" onclick="selectType('scripts')" class="type-opt px-3 py-2 rounded-xl text-xs font-bold border border-indra-border bg-indra-card text-white hover:border-indra-accent transition-colors" data-type="scripts">📜 Script</button>
+            <button type="button" onclick="selectType('mods')" class="type-opt px-3 py-2 rounded-xl text-xs font-bold border border-indra-border bg-indra-card text-white hover:border-indra-accent transition-colors" data-type="mods">🎮 ZIP/Мод</button>
+            <button type="button" onclick="selectType('web')" class="type-opt px-3 py-2 rounded-xl text-xs font-bold border border-indra-border bg-indra-card text-white hover:border-indra-accent transition-colors" data-type="web">🌐 Веб</button>
+          </div>
+        </div>
+
+        <!-- Название и Версия -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="sm:col-span-2">
+            <label class="block text-xs text-indra-muted mb-1">Название проекта *</label>
+            <input type="text" id="upTitle" required placeholder="Например: My Super Tool" class="w-full bg-indra-card border border-indra-border rounded-xl px-3.5 py-2 text-xs text-white placeholder-indra-muted focus:outline-none focus:border-indra-accent">
+          </div>
+          <div>
+            <label class="block text-xs text-indra-muted mb-1">Версия *</label>
+            <input type="text" id="upVersion" required placeholder="v1.0.0" class="w-full bg-indra-card border border-indra-border rounded-xl px-3.5 py-2 text-xs text-white placeholder-indra-muted focus:outline-none focus:border-indra-accent">
+          </div>
+        </div>
+
+        <!-- Поле файла ИЛИ внешней веб-ссылки -->
+        <div id="fileUploadContainer">
+          <label class="block text-xs text-indra-muted mb-1">Файл релиза (.apk, .exe, .zip, .lua, .py) *</label>
+          <div class="relative border-2 border-dashed border-indra-border hover:border-indra-accent rounded-2xl p-4 text-center cursor-pointer bg-indra-card/40 transition-colors" onclick="document.getElementById('fileInput').click()">
+            <input type="file" id="fileInput" class="hidden" onchange="onFileSelected(event)">
+            <div id="filePickerText" class="space-y-1">
+              <span class="text-2xl">📦</span>
+              <p class="text-xs font-semibold text-white">Нажмите для выбора файла</p>
+              <p class="text-[10px] text-indra-muted">Файл загрузится в GitHub Releases без ограничений скорости</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="webUrlContainer" class="hidden">
+          <label class="block text-xs text-indra-muted mb-1">Ссылка на веб-сайт или онлайн-проект *</label>
+          <input type="url" id="upWebUrl" placeholder="https://..." class="w-full bg-indra-card border border-indra-border rounded-xl px-3.5 py-2 text-xs text-white placeholder-indra-muted focus:outline-none focus:border-indra-accent">
+        </div>
+
+        <!-- Описание -->
+        <div>
+          <label class="block text-xs text-indra-muted mb-1">Краткое описание *</label>
+          <input type="text" id="upShortDesc" required placeholder="1-2 предложения для карточки каталога" class="w-full bg-indra-card border border-indra-border rounded-xl px-3.5 py-2 text-xs text-white placeholder-indra-muted focus:outline-none focus:border-indra-accent">
+        </div>
+
+        <div>
+          <label class="block text-xs text-indra-muted mb-1">Особенности (по одной на строке)</label>
+          <textarea id="upFeatures" rows="2" placeholder="Особенность 1&#10;Особенность 2" class="w-full bg-indra-card border border-indra-border rounded-xl px-3.5 py-2 text-xs text-white placeholder-indra-muted focus:outline-none focus:border-indra-accent"></textarea>
+        </div>
+
+        <!-- Теги -->
+        <div>
+          <label class="block text-xs text-indra-muted mb-1">Теги (через запятую)</label>
+          <input type="text" id="upTags" placeholder="Android, Mod, Tool" class="w-full bg-indra-card border border-indra-border rounded-xl px-3.5 py-2 text-xs text-white placeholder-indra-muted focus:outline-none focus:border-indra-accent">
+        </div>
+
+        <!-- Прогресс загрузки -->
+        <div id="uploadProgressBox" class="hidden bg-indra-card rounded-2xl p-4 border border-indra-border space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span id="uploadStatusText" class="text-indra-accent font-semibold flex items-center gap-1.5">
+              <span class="animate-spin">⏳</span> Загрузка в GitHub...
+            </span>
+            <span id="uploadPercentText" class="font-mono text-white">0%</span>
+          </div>
+          <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+            <div id="uploadProgressBar" class="bg-indra-accent h-2 rounded-full transition-all duration-200" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Кнопки отправки -->
+        <div class="pt-2 flex items-center justify-end gap-3">
+          <button type="button" onclick="closeUploadModal()" class="px-4 py-2.5 rounded-xl bg-indra-card text-indra-muted hover:text-white text-xs font-semibold transition-colors">
+            Отмена
+          </button>
+          <button type="submit" id="submitReleaseBtn" class="px-6 py-2.5 rounded-xl bg-indra-accent hover:bg-indra-accentHover text-black text-xs font-bold transition-all shadow-lg shadow-emerald-500/20 active:scale-95">
+            Опубликовать в AndrApp
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- Модальное окно настроек GitHub (только для автора) -->
+  <div id="settingsModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="bg-indra-surface border border-indra-border rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+      <button onclick="closeSettingsModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-indra-card flex items-center justify-center text-indra-muted hover:text-white transition-colors">
+        ✕
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-2xl bg-indra-card border border-indra-border flex items-center justify-center text-white">
+          ⚙️
+        </div>
+        <div>
+          <h2 class="text-base font-bold text-white">Связка с GitHub</h2>
+          <p class="text-xs text-indra-muted">Данные хранятся локально в твоем клиенте</p>
+        </div>
+      </div>
+
+      <div class="space-y-3.5 text-xs">
+        <div>
+          <label class="block text-indra-muted mb-1">Имя пользователя (Никнейм)</label>
+          <input type="text" id="cfgUsername" placeholder="Kalajer" class="w-full bg-indra-card border border-indra-border rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-indra-accent">
+        </div>
+
+        <div>
+          <label class="block text-indra-muted mb-1">Имя репозитория</label>
+          <input type="text" id="cfgRepo" placeholder="andrapp" class="w-full bg-indra-card border border-indra-border rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-indra-accent">
+        </div>
+
+        <div>
+          <label class="block text-indra-muted mb-1">GitHub Personal Access Token (PAT)</label>
+          <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full bg-indra-card border border-indra-border rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-indra-accent">
+          <p class="text-[10px] text-indra-muted mt-1 leading-relaxed">
+            Токен создается бесплатно на <a href="https://github.com/settings/tokens" target="_blank" class="text-indra-accent underline">github.com/settings/tokens</a> с правами <code class="text-slate-300">repo</code>. Он <b>никогда не публикуется</b> на сайте и доступен только тебе.
+          </p>
+        </div>
+
+        <div>
+          <label class="block text-indra-muted mb-1">Сменить мастер-пароль создателя</label>
+          <input type="password" id="cfgNewPassword" placeholder="Оставьте пустым, если не меняете" class="w-full bg-indra-card border border-indra-border rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-indra-accent">
+        </div>
+
+        <div class="pt-2 flex justify-end gap-2">
+          <button onclick="closeSettingsModal()" class="px-4 py-2 rounded-xl bg-indra-card text-indra-muted hover:text-white">Отмена</button>
+          <button onclick="saveSettings()" class="px-5 py-2 rounded-xl bg-indra-accent text-black font-bold hover:bg-indra-accentHover">Сохранить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Начальный каталог абсолютно чист: Kalajer сам решает, какие релизы публиковать
+    const DEFAULT_CATALOG = [];
+
+    // Состояние приложения
+    let catalog = [];
+    let activeCategory = 'all';
+    let searchQuery = '';
+    let currentSort = 'featured';
+    let selectedReleaseType = 'apk';
+    let selectedUploadFile = null;
+    let currentActiveApp = null;
+    let isAdmin = false;
+
+    // Счётчик кликов по логотипу для секретного входа
+    let logoClickCount = 0;
+    let logoClickTimeout = null;
+
+    // Конфигурация GitHub (сохраняется строго локально в localStorage устройства Kalajer)
+    let ghConfig = {
+      username: 'Kalajer',
+      repo: 'andrapp',
+      token: '',
+      passwordHash: ''
+    };
+
+    // Хэширование SHA-256 для безопасного сравнения мастер-пароля
+    async function sha256(message) {
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function loadSavedConfig() {
+      try {
+        const saved = localStorage.getItem('andrapp_gh_config');
+        if (saved) ghConfig = { ...ghConfig, ...JSON.parse(saved) };
+      } catch (e) {}
+
+      document.getElementById('cfgUsername').value = ghConfig.username || '';
+      document.getElementById('cfgRepo').value = ghConfig.repo || '';
+      document.getElementById('cfgToken').value = ghConfig.token || '';
+      document.getElementById('bannerRepoText').textContent = `${ghConfig.username}/${ghConfig.repo} • Storage`;
+
+      // Проверка сохраненной сессии администратора на данном устройстве
+      const session = sessionStorage.getItem('andrapp_admin_active');
+      if (session === 'true' && ghConfig.passwordHash) {
+        setAdminState(true);
+      } else {
+        setAdminState(false);
+      }
+    }
+
+    function setAdminState(active) {
+      isAdmin = active;
+      const controls = document.getElementById('adminControlsGroup');
+      const roleBadge = document.getElementById('roleBadge');
+      const bannerAdminAction = document.getElementById('bannerAdminAction');
+      const emptyAdminAction = document.getElementById('emptyAdminAction');
+
+      if (active) {
+        controls.classList.remove('hidden');
+        controls.classList.add('flex');
+        roleBadge.textContent = 'Kalajer Dev';
+        roleBadge.className = 'text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-indra-accentDim text-indra-accent border border-indra-accent/30';
+        if (bannerAdminAction) bannerAdminAction.classList.add('hidden');
+        if (emptyAdminAction) {
+          emptyAdminAction.innerHTML = `
+            <button onclick="openUploadModal()" class="px-5 py-2.5 rounded-2xl bg-indra-accent text-black font-bold text-xs hover:bg-indra-accentHover transition-transform active:scale-95 shadow-lg shadow-emerald-500/20">
+              ➕ Опубликовать первый релиз
+            </button>
+          `;
+        }
+      } else {
+        controls.classList.add('hidden');
+        controls.classList.remove('flex');
+        roleBadge.textContent = 'Store';
+        roleBadge.className = 'text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-indra-card text-indra-muted border border-indra-border';
+        if (bannerAdminAction) bannerAdminAction.classList.remove('hidden');
+        if (emptyAdminAction) {
+          emptyAdminAction.innerHTML = `
+            <button onclick="promptAdminLogin()" class="px-5 py-2.5 rounded-2xl bg-indra-surface hover:bg-indra-card border border-indra-border text-white font-semibold text-xs transition-colors">
+              🔐 Войти как автор
+            </button>
+          `;
+        }
+      }
+      renderApps();
+    }
+
+    function promptAdminLogin() {
+      const modal = document.getElementById('authModal');
+      const title = document.getElementById('authModalTitle');
+      const subtitle = document.getElementById('authModalSubtitle');
+      const label = document.getElementById('authInputLabel');
+      const hint = document.getElementById('authHintText');
+      const input = document.getElementById('adminPasswordInput');
+
+      input.value = '';
+
+      if (!ghConfig.passwordHash) {
+        title.textContent = 'Первый запуск';
+        subtitle.textContent = 'Создайте мастер-пароль для AndrApp';
+        label.textContent = 'Придумайте новый мастер-пароль';
+        hint.textContent = 'Этот пароль будет защищать вход в публикацию на этом устройстве.';
+      } else {
+        title.textContent = 'Доступ создателя';
+        subtitle.textContent = 'Вход в панель управления Kalajer';
+        label.textContent = 'Введите ваш мастер-пароль';
+        hint.textContent = 'Только вы можете публиковать релизы и менять настройки.';
+      }
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = 'hidden';
+      input.focus();
+    }
+
+    function closeAuthModal() {
+      const modal = document.getElementById('authModal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = '';
+    }
+
+    async function handleAuthSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('adminPasswordInput');
+      const pwd = input.value.trim();
+      if (!pwd) return;
+
+      const hash = await sha256(pwd);
+
+      if (!ghConfig.passwordHash) {
+        // Первый запуск: сохраняем мастер-пароль
+        ghConfig.passwordHash = hash;
+        localStorage.setItem('andrapp_gh_config', JSON.stringify(ghConfig));
+        sessionStorage.setItem('andrapp_admin_active', 'true');
+        setAdminState(true);
+        closeAuthModal();
+        showNotification('🔑 Мастер-пароль успешно сохранён! Панель создателя активна.');
+        if (!ghConfig.token) {
+          openSettingsModal();
+        }
+      } else {
+        if (hash === ghConfig.passwordHash) {
+          sessionStorage.setItem('andrapp_admin_active', 'true');
+          setAdminState(true);
+          closeAuthModal();
+          showNotification('👋 Добро пожаловать, Kalajer! Панель открыта.');
+        } else {
+          showNotification('❌ Неверный мастер-пароль!');
+          input.value = '';
+          input.focus();
+        }
+      }
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem('andrapp_admin_active');
+      setAdminState(false);
+      showNotification('🔒 Панель управления заблокирована.');
+    }
+
+    function saveSettings() {
+      ghConfig.username = document.getElementById('cfgUsername').value.trim() || 'Kalajer';
+      ghConfig.repo = document.getElementById('cfgRepo').value.trim() || 'andrapp';
+      ghConfig.token = document.getElementById('cfgToken').value.trim();
+
+      const newPwd = document.getElementById('cfgNewPassword').value.trim();
+      if (newPwd) {
+        sha256(newPwd).then(h => {
+          ghConfig.passwordHash = h;
+          finalizeSettingsSave();
+        });
+      } else {
+        finalizeSettingsSave();
+      }
+    }
+
+    function finalizeSettingsSave() {
+      try {
+        localStorage.setItem('andrapp_gh_config', JSON.stringify(ghConfig));
+      } catch (e) {}
+
+      document.getElementById('bannerRepoText').textContent = `${ghConfig.username}/${ghConfig.repo} • Storage`;
+      closeSettingsModal();
+      showNotification('✅ Настройки сохранены локально!');
+      syncCatalog(true);
+    }
+
+    // Секретный триггер: 3 быстрых клика по логотипу
+    document.getElementById('brandLogoTrigger').addEventListener('click', () => {
+      logoClickCount++;
+      clearTimeout(logoClickTimeout);
+      logoClickTimeout = setTimeout(() => {
+        if (logoClickCount >= 3) {
+          if (!isAdmin) {
+            promptAdminLogin();
+          } else {
+            showNotification('ℹ️ Вы уже находитесь в режиме создателя.');
+          }
+        } else {
+          filterCategory('all');
+        }
+        logoClickCount = 0;
+      }, 350);
+    });
+
+    function loadCatalog() {
+      try {
+        const local = localStorage.getItem('andrapp_local_catalog');
+        if (local) {
+          catalog = JSON.parse(local);
+        } else {
+          catalog = [...DEFAULT_CATALOG];
+        }
+      } catch (e) {
+        catalog = [...DEFAULT_CATALOG];
+      }
+      renderCategoriesBar();
+      renderApps();
+      syncCatalog(false);
+    }
+
+    function saveCatalogLocally() {
+      try {
+        localStorage.setItem('andrapp_local_catalog', JSON.stringify(catalog));
+      } catch (e) {}
+    }
+
+    async function syncCatalog(notifyUser = false) {
+      const refreshIcon = document.getElementById('refreshIcon');
+      refreshIcon.classList.add('animate-spin');
+
+      try {
+        // Загрузка catalog.json из корня репозитория GitHub
+        const url = `https://raw.githubusercontent.com/${ghConfig.username}/${ghConfig.repo}/main/andrapp_catalog.json?t=${Date.now()}`;
+        const res = await fetch(url);
+        
+        if (res.ok) {
+          const remoteCatalog = await res.json();
+          if (Array.isArray(remoteCatalog)) {
+            catalog = remoteCatalog;
+            saveCatalogLocally();
+            renderCategoriesBar();
+            renderApps();
+            if (notifyUser) showNotification('⚡ Каталог успешно синхронизирован с GitHub!');
+          }
+        } else {
+          if (notifyUser) showNotification('ℹ️ Каталог актуален.');
+        }
+      } catch (err) {
+        if (notifyUser) showNotification('⚠️ Автономный режим каталога.');
+      } finally {
+        refreshIcon.classList.remove('animate-spin');
+      }
+    }
+
+    function renderCategoriesBar() {
+      const bar = document.getElementById('categoriesBar');
+      
+      // Автоматическое определение категорий, присутствующих в каталоге
+      const availableCategories = new Set(catalog.map(item => item.category));
+      
+      const categoryMap = {
+        'all': { label: 'Все релизы', icon: '✨' },
+        'apk': { label: 'APK (Android)', icon: '🤖' },
+        'exe': { label: 'EXE (Windows)', icon: '💻' },
+        'scripts': { label: 'Скрипты & Luau', icon: '📜' },
+        'web': { label: 'Веб & Игры', icon: '🌐' },
+        'mods': { label: 'Моды & Архивы', icon: '🎮' }
+      };
+
+      // Всегда показываем "Все релизы", а остальные — если есть хотя бы 1 релиз или если активен режим админа
+      let catsToShow = ['all'];
+      Object.keys(categoryMap).forEach(catKey => {
+        if (catKey !== 'all' && (availableCategories.has(catKey) || isAdmin)) {
+          catsToShow.push(catKey);
+        }
+      });
+
+      bar.innerHTML = catsToShow.map(cat => {
+        const item = categoryMap[cat] || { label: cat.toUpperCase(), icon: '📁' };
+        const isActive = activeCategory === cat;
+        return `
+          <button 
+            class="chip ${isActive ? 'active bg-indra-accent text-black shadow-md shadow-emerald-500/20' : 'bg-indra-surface text-indra-muted hover:text-white hover:bg-indra-card border border-indra-border'} flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all" 
+            data-cat="${cat}"
+          >
+            <span>${item.icon}</span> ${item.label}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function renderApps() {
+      const container = document.getElementById('appsContainer');
+      const emptyState = document.getElementById('emptyState');
+      const countText = document.getElementById('itemsCountText');
+
+      let list = catalog.filter(app => {
+        const matchCat = activeCategory === 'all' || app.category === activeCategory;
+        const matchSearch = 
+          app.title.toLowerCase().includes(searchQuery) ||
+          app.shortDesc.toLowerCase().includes(searchQuery) ||
+          (app.tags && app.tags.some(t => t.toLowerCase().includes(searchQuery)));
+        return matchCat && matchSearch;
+      });
+
+      if (currentSort === 'rating') {
+        list.sort((a, b) => parseFloat(b.rating || 5) - parseFloat(a.rating || 5));
+      } else if (currentSort === 'name') {
+        list.sort((a, b) => a.title.localeCompare(b.title));
+      } else {
+        list.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+      }
+
+      countText.textContent = `Доступно релизов: ${list.length} из ${catalog.length}`;
+
+      if (list.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        if (catalog.length === 0) {
+          document.getElementById('emptyTitle').textContent = 'В каталоге пока нет релизов';
+          document.getElementById('emptyDesc').textContent = 'Витрина абсолютно чиста. Войдите как создатель, чтобы опубликовать первые файлы.';
+        } else {
+          document.getElementById('emptyTitle').textContent = 'Ничего не найдено';
+          document.getElementById('emptyDesc').textContent = 'Попробуйте изменить поисковый запрос или выбрать другую категорию.';
+        }
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      container.innerHTML = list.map(app => `
+        <div 
+          onclick="openModal('${app.id}')"
+          class="group relative bg-indra-surface hover:bg-indra-card border border-indra-border hover:border-indra-accent/50 rounded-2xl p-4 cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/40 flex flex-col justify-between"
+        >
+          <div>
+            <div class="flex items-start gap-3.5 mb-3">
+              <div class="w-14 h-14 rounded-2xl bg-indra-card group-hover:bg-indra-bg border border-indra-border p-2 flex items-center justify-center flex-shrink-0 transition-colors">
+                <img src="${app.icon || 'https://api.iconify.design/solar:box-bold.svg?color=%2300e599'}" alt="${app.title}" class="w-full h-full object-contain rounded-lg" onerror="this.src='https://api.iconify.design/solar:box-bold.svg?color=%2300e599'">
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-1">
+                  <h3 class="text-sm font-bold text-white group-hover:text-indra-accent transition-colors truncate">
+                    ${app.title}
+                  </h3>
+                </div>
+                <p class="text-xs text-indra-muted truncate mt-0.5">${app.developer || 'Kalajer'}</p>
+                <div class="flex items-center gap-2 mt-1.5 text-[11px]">
+                  <span class="inline-flex items-center text-amber-400 font-semibold">
+                    ★ ${app.rating || '5.0'}
+                  </span>
+                  <span class="text-indra-border">•</span>
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-mono uppercase font-bold border ${app.badgeColor || 'bg-slate-800 text-slate-300 border-slate-700'}">
+                    ${app.type}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <p class="text-xs text-indra-muted line-clamp-2 leading-relaxed mb-4">
+              ${app.shortDesc}
+            </p>
+          </div>
+
+          <div class="pt-3 border-t border-indra-border/60 flex items-center justify-between text-xs">
+            <span class="text-indra-muted text-[11px] font-mono">${app.size}</span>
+            <span class="inline-flex items-center gap-1 text-indra-accent font-semibold text-xs group-hover:underline">
+              ${app.isWeb ? 'Открыть' : 'Скачать'} <span>→</span>
+            </span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openModal(id) {
+      const app = catalog.find(item => item.id === id);
+      if (!app) return;
+      currentActiveApp = app;
+
+      document.getElementById('modalTitle').textContent = app.title;
+      document.getElementById('modalAuthor').textContent = `Автор: ${app.developer || 'Kalajer'}`;
+      document.getElementById('modalIcon').src = app.icon || 'https://api.iconify.design/solar:box-bold.svg?color=%2300e599';
+      document.getElementById('modalRating').textContent = app.rating || '5.0';
+      document.getElementById('modalSize').textContent = app.size;
+      document.getElementById('modalVersion').textContent = `v${app.version}`;
+      document.getElementById('modalDesc').textContent = app.description || app.shortDesc;
+
+      document.getElementById('modalBadges').innerHTML = `
+        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase font-bold border ${app.badgeColor || 'bg-slate-800 text-slate-300 border-slate-700'}">
+          ${app.type}
+        </span>
+        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-indra-card text-indra-muted border border-indra-border">
+          ${app.category.toUpperCase()}
+        </span>
+      `;
+
+      const featuresList = document.getElementById('modalFeaturesList');
+      if (app.features && app.features.length > 0) {
+        document.getElementById('modalFeaturesContainer').classList.remove('hidden');
+        featuresList.innerHTML = app.features.map(f => `<li>${f}</li>`).join('');
+      } else {
+        document.getElementById('modalFeaturesContainer').classList.add('hidden');
+      }
+
+      document.getElementById('modalTags').innerHTML = (app.tags || []).map(t => `
+        <span class="px-2 py-1 rounded-lg bg-indra-card text-[11px] text-slate-300 font-mono border border-indra-border">
+          #${t}
+        </span>
+      `).join('');
+
+      const actionBtn = document.getElementById('modalActionBtn');
+      const actionIcon = document.getElementById('modalActionIcon');
+      const actionText = document.getElementById('modalActionText');
+      actionBtn.href = app.downloadUrl;
+
+      if (app.isWeb) {
+        actionIcon.textContent = '🌐';
+        actionText.textContent = 'Открыть сайт в браузере';
+      } else {
+        actionIcon.textContent = '⬇️';
+        actionText.textContent = `Скачать ${app.type}`;
+      }
+
+      const modal = document.getElementById('appModal');
+      const box = document.getElementById('modalBox');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      box.classList.remove('scale-95');
+      box.classList.add('scale-100');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('appModal');
+      const box = document.getElementById('modalBox');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      box.classList.remove('scale-100');
+      box.classList.add('scale-95');
+      document.body.style.overflow = '';
+      currentActiveApp = null;
+    }
+
+    function copyDownloadUrl() {
+      if (!currentActiveApp) return;
+      const dummy = document.createElement('input');
+      document.body.appendChild(dummy);
+      dummy.value = currentActiveApp.downloadUrl;
+      dummy.select();
+      document.execCommand('copy');
+      document.body.removeChild(dummy);
+      showNotification('📋 Ссылка на файл скопирована!');
+    }
+
+    function openUploadModal() {
+      if (!isAdmin) {
+        promptAdminLogin();
+        return;
+      }
+      selectType('apk');
+      document.getElementById('uploadForm').reset();
+      selectedUploadFile = null;
+      document.getElementById('filePickerText').innerHTML = `
+        <span class="text-2xl">📦</span>
+        <p class="text-xs font-semibold text-white">Нажмите для выбора файла</p>
+        <p class="text-[10px] text-indra-muted">Файл загрузится в GitHub Releases без лимитов скорости</p>
+      `;
+      document.getElementById('uploadProgressBox').classList.add('hidden');
+      document.getElementById('submitReleaseBtn').disabled = false;
+
+      const modal = document.getElementById('uploadModal');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeUploadModal() {
+      const modal = document.getElementById('uploadModal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = '';
+    }
+
+    function openSettingsModal() {
+      if (!isAdmin) {
+        promptAdminLogin();
+        return;
+      }
+      document.getElementById('cfgNewPassword').value = '';
+      const modal = document.getElementById('settingsModal');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSettingsModal() {
+      const modal = document.getElementById('settingsModal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = '';
+    }
+
+    function selectType(type) {
+      selectedReleaseType = type;
+      document.querySelectorAll('.type-opt').forEach(btn => {
+        if (btn.getAttribute('data-type') === type) {
+          btn.className = 'type-opt px-3 py-2 rounded-xl text-xs font-bold border border-indra-accent bg-indra-accent text-black transition-colors';
+        } else {
+          btn.className = 'type-opt px-3 py-2 rounded-xl text-xs font-bold border border-indra-border bg-indra-card text-white hover:border-indra-accent transition-colors';
+        }
+      });
+
+      const fileContainer = document.getElementById('fileUploadContainer');
+      const webContainer = document.getElementById('webUrlContainer');
+
+      if (type === 'web') {
+        fileContainer.classList.add('hidden');
+        webContainer.classList.remove('hidden');
+        document.getElementById('upWebUrl').required = true;
+      } else {
+        fileContainer.classList.remove('hidden');
+        webContainer.classList.add('hidden');
+        document.getElementById('upWebUrl').required = false;
+      }
+    }
+
+    function onFileSelected(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      selectedUploadFile = file;
+
+      const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+      document.getElementById('filePickerText').innerHTML = `
+        <span class="text-2xl">✅</span>
+        <p class="text-xs font-bold text-indra-accent">${file.name}</p>
+        <p class="text-[10px] text-slate-300">Размер: ${sizeMB > 0.1 ? sizeMB + ' MB' : (file.size / 1024).toFixed(0) + ' KB'}</p>
+      `;
+    }
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+
+      if (!isAdmin) {
+        showNotification('⚠️ Доступ запрещён: авторизуйтесь как создатель.');
+        return;
+      }
+
+      const title = document.getElementById('upTitle').value.trim();
+      const version = document.getElementById('upVersion').value.trim();
+      const shortDesc = document.getElementById('upShortDesc').value.trim();
+      const featuresRaw = document.getElementById('upFeatures').value.trim();
+      const tagsRaw = document.getElementById('upTags').value.trim();
+      const isWeb = selectedReleaseType === 'web';
+      const webUrl = document.getElementById('upWebUrl').value.trim();
+
+      if (!isWeb && !selectedUploadFile) {
+        showNotification('⚠️ Выберите файл для загрузки!');
+        return;
+      }
+
+      if (!isWeb && !ghConfig.token) {
+        showNotification('🔑 Укажите GitHub Token в настройках ⚙️ для публикации файлов.');
+        openSettingsModal();
+        return;
+      }
+
+      const progressBox = document.getElementById('uploadProgressBox');
+      const progressBar = document.getElementById('uploadProgressBar');
+      const progressText = document.getElementById('uploadPercentText');
+      const statusText = document.getElementById('uploadStatusText');
+      const submitBtn = document.getElementById('submitReleaseBtn');
+
+      progressBox.classList.remove('hidden');
+      submitBtn.disabled = true;
+
+      let finalDownloadUrl = isWeb ? webUrl : '';
+      let calculatedSize = isWeb ? 'Онлайн' : `${(selectedUploadFile.size / (1024 * 1024)).toFixed(1)} MB`;
+      if (!isWeb && selectedUploadFile.size < 1024 * 1024) {
+        calculatedSize = `${(selectedUploadFile.size / 1024).toFixed(0)} KB`;
+      }
+
+      try {
+        if (!isWeb) {
+          // 1. Создание Release в GitHub через API
+          statusText.innerHTML = '<span class="animate-spin">⏳</span> Создание релиза в GitHub...';
+          progressBar.style.width = '25%';
+          progressText.textContent = '25%';
+
+          const tag = `v${version.replace(/^v/, '')}-${Date.now().toString().slice(-4)}`;
+          const relRes = await fetch(`https://api.github.com/repos/${ghConfig.username}/${ghConfig.repo}/releases`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `token ${ghConfig.token}`,
+              'Accept': 'application/vnd.github.v3+json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              tag_name: tag,
+              name: `${title} ${version}`,
+              body: `${shortDesc}\n\nОпубликовано через AndrApp Client.`,
+              draft: false,
+              prerelease: false
+            })
+          });
+
+          if (!relRes.ok) {
+            const err = await relRes.json();
+            throw new Error(err.message || 'Ошибка создания Release в GitHub');
+          }
+
+          const relData = await relRes.json();
+          const uploadUrlTemplate = relData.upload_url.split('{')[0];
+
+          // 2. Отправка бинарного файла как Asset
+          statusText.innerHTML = '<span class="animate-spin">🚀</span> Отправка файла в хранилище...';
+          progressBar.style.width = '60%';
+          progressText.textContent = '60%';
+
+          const assetUploadUrl = `${uploadUrlTemplate}?name=${encodeURIComponent(selectedUploadFile.name)}`;
+          const uploadRes = await fetch(assetUploadUrl, {
+            method: 'POST',
+            headers: {
+              'Authorization': `token ${ghConfig.token}`,
+              'Content-Type': selectedUploadFile.type || 'application/octet-stream'
+            },
+            body: selectedUploadFile
+          });
+
+          if (!uploadRes.ok) {
+            const err = await uploadRes.json();
+            throw new Error(err.message || 'Ошибка загрузки ассета');
+          }
+
+          const assetData = await uploadRes.json();
+          finalDownloadUrl = assetData.browser_download_url;
+          progressBar.style.width = '90%';
+          progressText.textContent = '90%';
+        }
+
+        // Цвета и типы карточек
+        const badgeColors = {
+          apk: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+          exe: "bg-sky-500/20 text-sky-400 border-sky-500/30",
+          scripts: "bg-indigo-500/20 text-indigo-400 border-indigo-500/30",
+          mods: "bg-rose-500/20 text-rose-400 border-rose-500/30",
+          web: "bg-amber-500/20 text-amber-400 border-amber-500/30"
+        };
+
+        const typeLabels = {
+          apk: "APK (Android)",
+          exe: "EXE (Win)",
+          scripts: "LUAU / SCRIPT",
+          mods: "ZIP / MOD",
+          web: "WEB APP"
+        };
+
+        const icons = {
+          apk: "https://api.iconify.design/solar:smartphone-2-bold.svg?color=%2310b981",
+          exe: "https://api.iconify.design/solar:server-square-bold.svg?color=%2338bdf8",
+          scripts: "https://api.iconify.design/solar:ghost-bold.svg?color=%23818cf8",
+          mods: "https://api.iconify.design/solar:box-bold.svg?color=%23fb7185",
+          web: "https://api.iconify.design/solar:swords-bold.svg?color=%23f59e0b"
+        };
+
+        const newRelease = {
+          id: `item-${Date.now()}`,
+          title: title,
+          developer: ghConfig.username || "Kalajer",
+          category: selectedReleaseType,
+          type: typeLabels[selectedReleaseType] || "РЕЛИЗ",
+          badgeColor: badgeColors[selectedReleaseType] || "bg-slate-800 text-slate-300 border-slate-700",
+          version: version,
+          size: calculatedSize,
+          rating: "5.0",
+          icon: icons[selectedReleaseType],
+          shortDesc: shortDesc,
+          description: `${shortDesc}\n\nФайл безопасно хранится в GitHub CDN.`,
+          features: featuresRaw ? featuresRaw.split('\n').filter(Boolean) : ["Прямая загрузка без сторонней рекламы"],
+          tags: tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : [selectedReleaseType],
+          downloadUrl: finalDownloadUrl,
+          isWeb: isWeb,
+          timestamp: Date.now()
+        };
+
+        // Добавляем релиз в начало каталога
+        catalog.unshift(newRelease);
+        saveCatalogLocally();
+        renderCategoriesBar();
+        renderApps();
+
+        progressBar.style.width = '100%';
+        progressText.textContent = '100%';
+        statusText.textContent = '✅ Готово!';
+
+        // Сохраняем обновленный catalog.json в GitHub repo
+        if (ghConfig.token) {
+          try {
+            await saveCatalogToGitHub(catalog);
+          } catch(e) {}
+        }
+
+        setTimeout(() => {
+          closeUploadModal();
+          showNotification('🎉 Релиз опубликован! Ссылка доступна для всех.');
+        }, 600);
+
+      } catch (err) {
+        showNotification('❌ Ошибка: ' + err.message);
+        progressBox.classList.add('hidden');
+        submitBtn.disabled = false;
+      }
+    }
+
+    async function saveCatalogToGitHub(newCatalogData) {
+      let sha = null;
+      const check = await fetch(`https://api.github.com/repos/${ghConfig.username}/${ghConfig.repo}/contents/andrapp_catalog.json`, {
+        headers: { 'Authorization': `token ${ghConfig.token}` }
+      });
+      if (check.ok) {
+        const checkData = await check.json();
+        sha = checkData.sha;
+      }
+
+      const contentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(newCatalogData, null, 2))));
+      await fetch(`https://api.github.com/repos/${ghConfig.username}/${ghConfig.repo}/contents/andrapp_catalog.json`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${ghConfig.token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: 'Update AndrApp catalog',
+          content: contentBase64,
+          sha: sha || undefined
+        })
+      });
+    }
+
+    function filterCategory(cat) {
+      activeCategory = cat;
+      document.querySelectorAll('#categoriesBar .chip').forEach(btn => {
+        if (btn.getAttribute('data-cat') === cat) {
+          btn.className = 'chip active flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-indra-accent text-black shadow-md shadow-emerald-500/20';
+        } else {
+          btn.className = 'chip flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all bg-indra-surface text-indra-muted hover:text-white hover:bg-indra-card border border-indra-border';
+        }
+      });
+      renderApps();
+    }
+
+    document.getElementById('categoriesBar').addEventListener('click', (e) => {
+      const btn = e.target.closest('.chip');
+      if (btn) filterCategory(btn.getAttribute('data-cat'));
+    });
+
+    function handleSearch(val) {
+      searchQuery = val.trim().toLowerCase();
+      document.getElementById('searchInput').value = val;
+      document.getElementById('searchInputMobile').value = val;
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (searchQuery.length > 0) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+      renderApps();
+    }
+
+    document.getElementById('searchInput').addEventListener('input', (e) => handleSearch(e.target.value));
+    document.getElementById('searchInputMobile').addEventListener('input', (e) => handleSearch(e.target.value));
+    document.getElementById('clearSearchBtn').addEventListener('click', () => {
+      handleSearch('');
+      document.getElementById('searchInput').focus();
+    });
+
+    document.getElementById('sortSelect').addEventListener('change', (e) => {
+      currentSort = e.target.value;
+      renderApps();
+    });
+
+    function showNotification(msg) {
+      const toast = document.createElement('div');
+      toast.className = 'fixed bottom-6 right-6 z-50 bg-indra-card border border-indra-accent/40 text-white px-4 py-3 rounded-2xl shadow-2xl text-xs flex items-center gap-2 transform translate-y-4 opacity-0 transition-all duration-300';
+      toast.innerHTML = `<span>${msg}</span>`;
+      document.body.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-4', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-4', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeUploadModal();
+        closeSettingsModal();
+        closeAuthModal();
+      }
+    });
+
+    window.onload = function() {
+      loadSavedConfig();
+      loadCatalog();
+    };
+  </script>
+</body>
+</html>
